@@ -1,11 +1,12 @@
-// src/components/QuickActionsWithThreeJS.tsx (versión moderna)
+// src/components/QuickActionsWithThreeJS.tsx (actualizado con contadores animados)
 'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { PlaylistGenerator } from './PlaylistGenerator';
+import { AnimatedCounter } from './AnimatedCounter';
 
-// Iconos modernos usando SVG
+// Iconos modernos usando SVG (mantenemos los mismos)
 const WorkoutIcon = () => (
   <svg className='w-full h-full' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
     <path d='m6.5 6.5 11 11' />
@@ -207,19 +208,16 @@ export default function QuickActionsWithThreeJS() {
               }}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Gradient overlay on hover */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
               />
 
-              {/* Icon container */}
               <div
                 className={`relative w-16 h-16 mb-4 p-3 rounded-xl bg-gradient-to-br ${action.gradient} text-white shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300`}
               >
                 <action.icon />
               </div>
 
-              {/* Content */}
               <div className='relative'>
                 <h4 className='text-lg font-semibold mb-2 text-white group-hover:text-gray-100 transition-colors'>
                   {action.label}
@@ -229,17 +227,6 @@ export default function QuickActionsWithThreeJS() {
                 </p>
               </div>
 
-              {/* Animated border */}
-              <div
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${action.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                style={{
-                  background: `linear-gradient(45deg, transparent, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%, transparent)`,
-                  backgroundSize: '200% 200%',
-                  animation: 'shimmer 3s ease-in-out infinite',
-                }}
-              />
-
-              {/* Arrow indicator */}
               <div className='absolute top-4 right-4 w-6 h-6 text-gray-400 group-hover:text-white transform group-hover:translate-x-1 transition-all duration-300'>
                 <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
                   <path d='M7 17L17 7M17 7H7M17 7V17' />
@@ -249,7 +236,7 @@ export default function QuickActionsWithThreeJS() {
           ))}
         </motion.div>
 
-        {/* Stats section */}
+        {/* Stats section con contadores animados */}
         <motion.div
           className='mt-16 grid grid-cols-2 md:grid-cols-4 gap-6'
           initial={{ opacity: 0, y: 30 }}
@@ -257,19 +244,44 @@ export default function QuickActionsWithThreeJS() {
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          {[
-            { number: '50K+', label: 'Playlists creadas' },
-            { number: '1M+', label: 'Canciones analizadas' },
-            { number: '95%', label: 'Satisfacción' },
-            { number: '24/7', label: 'Disponible' },
-          ].map((stat, index) => (
-            <div key={index} className='text-center bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4'>
-              <div className='text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-1'>
-                {stat.number}
-              </div>
-              <div className='text-sm text-gray-400'>{stat.label}</div>
+          <div className='text-center bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4 group hover:bg-white/10 transition-all duration-300'>
+            <AnimatedCounter
+              end={50000}
+              suffix='+'
+              duration={2500}
+              className='text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-1 block'
+            />
+            <div className='text-sm text-gray-400 group-hover:text-gray-300 transition-colors'>Playlists creadas</div>
+          </div>
+
+          <div className='text-center bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4 group hover:bg-white/10 transition-all duration-300'>
+            <AnimatedCounter
+              end={1200000}
+              suffix='+'
+              duration={3000}
+              className='text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent mb-1 block'
+            />
+            <div className='text-sm text-gray-400 group-hover:text-gray-300 transition-colors'>
+              Canciones analizadas
             </div>
-          ))}
+          </div>
+
+          <div className='text-center bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4 group hover:bg-white/10 transition-all duration-300'>
+            <AnimatedCounter
+              end={95}
+              suffix='%'
+              duration={2000}
+              className='text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 to-rose-500 bg-clip-text text-transparent mb-1 block'
+            />
+            <div className='text-sm text-gray-400 group-hover:text-gray-300 transition-colors'>Satisfacción</div>
+          </div>
+
+          <div className='text-center bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4 group hover:bg-white/10 transition-all duration-300'>
+            <div className='text-2xl md:text-3xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent mb-1'>
+              24/7
+            </div>
+            <div className='text-sm text-gray-400 group-hover:text-gray-300 transition-colors'>Disponible</div>
+          </div>
         </motion.div>
       </div>
 
@@ -282,17 +294,6 @@ export default function QuickActionsWithThreeJS() {
           }}
         />
       )}
-
-      <style jsx>{`
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      `}</style>
     </section>
   );
 }

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@react-three/drei": "^10.2.0",
     "@react-three/fiber": "^9.1.2",
     "@types/three": "^0.177.0",
