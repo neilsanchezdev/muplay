@@ -1,12 +1,11 @@
 // src/lib/gemini.ts
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import { PlaylistRequest, Song } from '@/types';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 export async function generatePlaylist(request: PlaylistRequest): Promise<Song[]> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-
   const prompt = `
     Eres un experto curador musical. Genera una playlist de 15-20 canciones basada en:
     
@@ -34,12 +33,20 @@ export async function generatePlaylist(request: PlaylistRequest): Promise<Song[]
   `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const result = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: prompt,
+      config: {
+        temperature: 0.9,
+        topP: 0.9,
+        topK: 40,
+      },
+    });
+
+    const text = result.text;
 
     // Parse JSON response
-    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    const jsonMatch = text?.match(/\[[\s\S]*\]/);
     if (!jsonMatch) {
       throw new Error('No valid JSON found in response');
     }
